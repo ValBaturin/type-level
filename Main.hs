@@ -7,6 +7,8 @@
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE AllowAmbiguousTypes #-}
 
+{-# LANGUAGE GADTs #-}
+
 import GHC.TypeLits
 import Data.Typeable
 
@@ -19,3 +21,10 @@ typeName = show . typeRep $ Proxy @a
 
 data Typelevel
 main = putStrLn $ typeName @Typelevel
+
+data Expr a where
+    LitInt :: Int -> Expr Int
+    LitBool :: Bool -> Expr Bool
+    Add :: Expr Int -> Expr Int -> Expr Int
+    Not :: Expr Bool -> Expr Bool
+    If :: Expr Bool -> Expr a -> Expr a -> Expr a
