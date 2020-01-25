@@ -12,6 +12,8 @@
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE UndecidableInstances #-}
  
+{-# LANGUAGE RankNTypes #-}
+
 import GHC.TypeLits
 import Data.Typeable
 
@@ -46,5 +48,16 @@ data HList (ts :: [Type]) where
     (:#) :: t -> HList ts -> HList (t ': ts)
 infixr 5 :#
 
+hLength :: HList ts -> Int
+hLength HNil = 0
+hLength (_ :# ts) = 1 + hLength ts
+
 hHead :: HList (t ': ts) -> t
 hHead (t :# _) = t
+
+
+newtype Cont a = Cont { unCont :: forall r. (a -> r) -> r }
+
+--  instance Functor Cont where
+--  instance Applicative Cont where
+--  instance Monad Cont where
