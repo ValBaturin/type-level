@@ -58,6 +58,8 @@ hHead (t :# _) = t
 
 newtype Cont a = Cont { unCont :: forall r. (a -> r) -> r }
 
---  instance Functor Cont where
+instance Functor Cont where
+    fmap f a = Cont (\callback -> unCont a (callback . f) )
+
 --  instance Applicative Cont where
 --  instance Monad Cont where
